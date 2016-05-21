@@ -1,0 +1,5 @@
+framework module Intilery {
+    umbrella header "Intilery.h"
+    export *
+    module * { export * }
+ }
