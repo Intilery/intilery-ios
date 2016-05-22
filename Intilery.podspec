@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = 'Intilery'
-  s.version      = '0.0.4'
+  s.version      = '0.0.5'
   s.summary      = 'iPhone tracking library for Intilery Analytics'
   s.homepage     = 'https://intilery.com'
   s.license      = 'Apache License, Version 2.0'

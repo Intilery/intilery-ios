@@ -12,7 +12,7 @@
 #import "MPLogger.h"
 #import "MPFoundation.h"
 
-#define VERSION @"0.0.4"
+#define VERSION @"0.0.5"
 #define INTILERY_URL @"https://www.intilery-analytics.com"
 
 
