@@ -12,7 +12,7 @@
 #import "MPLogger.h"
 #import "MPFoundation.h"
 
-#define VERSION @"0.0.3"
+#define VERSION @"0.0.4"
 #define INTILERY_URL @"https://www.intilery-analytics.com"
 
 
@@ -469,7 +469,7 @@ static Intilery *sharedInstance = nil;
         NSError *error = nil;
         
         NSHTTPURLResponse *urlResponse = nil;
-        NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
+        [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
         
         BOOL success = [self handleNetworkResponse:urlResponse withError:error];
         if (error || !success) {
