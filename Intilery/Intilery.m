@@ -41,7 +41,7 @@
 @implementation Intilery
 
 static Intilery *sharedInstance = nil;
-+ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions withIntileryURL:(NSString *)intileryURL
++ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken withLaunchOptions:(NSDictionary *)launchOptions withIntileryURL:(NSString *)intileryURL
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -52,7 +52,7 @@ static Intilery *sharedInstance = nil;
         const NSUInteger flushInterval = 60;
 #endif
         
-        sharedInstance = [[super alloc] initWithToken:appName withToken:apiToken launchOptions:launchOptions andFlushInterval:flushInterval withIntileryURL:intileryURL];
+        sharedInstance = [[super alloc] initWithToken:appName withToken:apiToken withLaunchOptions:launchOptions andFlushInterval:flushInterval withIntileryURL:intileryURL];
     });
     return sharedInstance;
 }
@@ -65,13 +65,13 @@ static Intilery *sharedInstance = nil;
 
 + (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken withIntileryURL:(NSString *)intileryURL
 {
-    return [Intilery sharedInstanceWithToken:appName withToken:apiToken launchOptions:nil withIntileryURL:intileryURL];
+    return [Intilery sharedInstanceWithToken:appName withToken:apiToken withLaunchOptions:nil withIntileryURL:intileryURL];
 }
 
 
-+ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
++ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken withLaunchOptions:(NSDictionary *)launchOptions
 {
-    return [Intilery sharedInstanceWithToken:appName withToken:apiToken launchOptions:launchOptions withIntileryURL:INTILERY_URL];
+    return [Intilery sharedInstanceWithToken:appName withToken:apiToken withLaunchOptions:launchOptions withIntileryURL:INTILERY_URL];
 }
 
 + (Intilery *)sharedInstance
@@ -82,7 +82,7 @@ static Intilery *sharedInstance = nil;
     return sharedInstance;
 }
 
-- (instancetype)initWithToken:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval withIntileryURL:(NSString *)intileryURL
+- (instancetype)initWithToken:(NSString *)appName withToken:(NSString *)apiToken withLaunchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval withIntileryURL:(NSString *)intileryURL
 {
     if (apiToken == nil) {
         apiToken = @"";
@@ -113,7 +113,7 @@ static Intilery *sharedInstance = nil;
         [self unarchive];
         
         if (launchOptions && launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-            //[self trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$app_open"];
+            [self trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] withEvent:@"App Open"];
         }
     }
     return self;
@@ -351,15 +351,19 @@ static Intilery *sharedInstance = nil;
 }
 
 
-- (void)trackPushNotification:(NSDictionary *)userInfo event:(NSString *)event
+- (void)trackPushNotification:(NSDictionary *)userInfo withEvent:(NSString *)event
 {
-    IntileryDebug(@"%@ tracking push payload %@", self, userInfo);
-    //TODO
+    if (userInfo && userInfo[@"it"]) {
+        NSDictionary *payload = userInfo[@"it"];
+        if ([payload isKindOfClass:[NSDictionary class]] && payload[@"id"]) {
+            [self track:event properties:@{@"_Push.ID":payload[@"id"]}];
+        }
+    }
 }
 
 - (void)trackPushNotification:(NSDictionary *)userInfo
 {
-    [self trackPushNotification:userInfo event:@"push opened"];
+    [self trackPushNotification:userInfo withEvent:@"push open"];
 }
 
 

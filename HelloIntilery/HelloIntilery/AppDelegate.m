@@ -8,8 +8,8 @@
 #import "AppDelegate.h"
 #import "Intilery.h"
 
-#define INTILERY_APP @"YOUR APP NAME HERE"
-#define INTILERY_TOKEN @"YOUR TOKEN HERE"
+#define INTILERY_APP @"ios-test"
+#define INTILERY_TOKEN @"NWlvcy0xNDUxMDI4OTpOZnpxS0lsVnRMOSQ="
 
 @interface AppDelegate ()
 
@@ -21,7 +21,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
     
-    [Intilery sharedInstanceWithToken:INTILERY_APP withToken:INTILERY_TOKEN];
+    [Intilery sharedInstanceWithToken:INTILERY_APP withToken:INTILERY_TOKEN withLaunchOptions:launchOptions];
     
     // Tell iOS you want your app to receive push notifications
     // This code will work in iOS 8.0 xcode 6.0 or later:
@@ -40,7 +40,6 @@
 }
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    NSLog(@"deviceToken: %@", deviceToken);
     [[Intilery sharedInstance] addPushDeviceToken:deviceToken];
 }
 
@@ -51,7 +50,9 @@ didReceiveRemoteNotification:(NSDictionary *)userInfo
     NSString *message = [[userInfo objectForKey:@"aps"]
                          objectForKey:@"alert"];
     
-    NSLog(@"Recieved push message: %@", message);
+    NSLog(@"Recieved push message: %@", userInfo);
+    
+    [[Intilery sharedInstance] trackPushNotification:userInfo];
     
     // Show alert for push notifications recevied while the
     // app is running
