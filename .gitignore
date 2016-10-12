@@ -20,7 +20,8 @@ profile
 *.p12
 *.mobileprovision
 
-**/xcuserdata/
+project.xcworkspace/
+xcuserdata/
 
 # AppCode
 .idea
@@ -29,3 +30,5 @@ profile
 Carthage/Build
 
 HelloIntilery/build/
+HelloIntilery/HelloIntilery.xcodeproj/xcuserdata/
+HelloIntilery/HelloIntilery.xcodeproj/project.xcworkspace/
