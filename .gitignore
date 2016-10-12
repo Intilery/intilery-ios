@@ -20,6 +20,8 @@ profile
 *.p12
 *.mobileprovision
 
+**/xcuserdata/
+
 # AppCode
 .idea
 

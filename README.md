@@ -47,15 +47,16 @@ Add all dependencies of the Intilery SDK to your app. The full list of necessary
 
 ## Step 4: Integrate!
 
-Import "Intilery.h" into AppDelegate.m, and initialize Intilery as described in the documentation. 
-
+Import `Intilery.h` into your `AppDelegate.m` and add the following lines of code:
 ```
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
-    
+
     [Intilery sharedInstanceWithToken:INTILERY_APP withToken:INTILERY_TOKEN];
 }
 ```
+
+See [Integration Guide](INTEGRATION.md) for more details.
 
 ## Start tracking
 
