@@ -21,6 +21,7 @@ name matches the `event action`.
     Intilery *intilery = [Intilery sharedInstance];
     [intilery track:@"<event action>" properties:@{@"<Entity>.<Property>":@"<Value>"} withName:@"<event name>"];
 ```
+
 ## Register for Push Notifications
 
 To associate the visitor with a token to use with push notifications you first of all need to generate a token.
@@ -34,7 +35,7 @@ Once you have the token you can register the device to receive push messages
 ```
 
 ## Tracking Events
-```JavaScript
+```ObjectiveC
 [[Intilery sharedInstance] track:@"<event action>" properties:@{@"<Entity>.<Property>":@"<Value>"} withName:@"<event name>"]
 ```
 
@@ -59,7 +60,7 @@ If you are interacting with a visitor function, pass the name of the function to
 ```
 
 ## Get Visitor Properties
-```JavaScript
+```ObjectiveC
 [[Intilery sharedInstance] getVisitorProperties:@[@"property"] callback:^(NSDictionary * properties) {}];
 ```
 
@@ -68,7 +69,7 @@ Where `property list` is a list of visitor properties, and you pass a block to e
 The resulting dictionary is a Dictionary containing each property asked for with a dictionary containing `value` and `typedValue` keys.
 
 e.g.
-```JavaScript
+```ObjectiveC
 [[Intilery sharedInstance] getVisitorProperties:@[@"Favourite Colour", @"Favourite Film"] callback:
      ^(NSDictionary * properties) {
          [self.properties setText:[NSString stringWithFormat:@"Film: %@, Colour: %@",
