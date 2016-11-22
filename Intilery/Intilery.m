@@ -9,10 +9,10 @@
 #include <sys/sysctl.h>
 
 #import "Intilery.h"
-#import "MPLogger.h"
+#import "IntileryLogger.h"
 #import "MPFoundation.h"
 
-#define VERSION @"0.0.5"
+#define VERSION @"0.0.6"
 #define INTILERY_URL @"https://www.intilery-analytics.com"
 
 
@@ -41,7 +41,7 @@
 @implementation Intilery
 
 static Intilery *sharedInstance = nil;
-+ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken withLaunchOptions:(NSDictionary *)launchOptions withIntileryURL:(NSString *)intileryURL
++ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions withIntileryURL:(NSString *)intileryURL
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -52,7 +52,7 @@ static Intilery *sharedInstance = nil;
         const NSUInteger flushInterval = 60;
 #endif
         
-        sharedInstance = [[super alloc] initWithToken:appName withToken:apiToken withLaunchOptions:launchOptions andFlushInterval:flushInterval withIntileryURL:intileryURL];
+        sharedInstance = [[super alloc] initWithToken:appName withToken:apiToken launchOptions:launchOptions andFlushInterval:flushInterval withIntileryURL:intileryURL];
     });
     return sharedInstance;
 }
@@ -65,13 +65,13 @@ static Intilery *sharedInstance = nil;
 
 + (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken withIntileryURL:(NSString *)intileryURL
 {
-    return [Intilery sharedInstanceWithToken:appName withToken:apiToken withLaunchOptions:nil withIntileryURL:intileryURL];
+    return [Intilery sharedInstanceWithToken:appName withToken:apiToken launchOptions:nil withIntileryURL:intileryURL];
 }
 
 
-+ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken withLaunchOptions:(NSDictionary *)launchOptions
++ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
 {
-    return [Intilery sharedInstanceWithToken:appName withToken:apiToken withLaunchOptions:launchOptions withIntileryURL:INTILERY_URL];
+    return [Intilery sharedInstanceWithToken:appName withToken:apiToken launchOptions:launchOptions withIntileryURL:INTILERY_URL];
 }
 
 + (Intilery *)sharedInstance
@@ -82,7 +82,7 @@ static Intilery *sharedInstance = nil;
     return sharedInstance;
 }
 
-- (instancetype)initWithToken:(NSString *)appName withToken:(NSString *)apiToken withLaunchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval withIntileryURL:(NSString *)intileryURL
+- (instancetype)initWithToken:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval withIntileryURL:(NSString *)intileryURL
 {
     if (apiToken == nil) {
         apiToken = @"";
@@ -113,7 +113,7 @@ static Intilery *sharedInstance = nil;
         [self unarchive];
         
         if (launchOptions && launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey]) {
-            [self trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] withEvent:@"App Open"];
+            //[self trackPushNotification:launchOptions[UIApplicationLaunchOptionsRemoteNotificationKey] event:@"$app_open"];
         }
     }
     return self;
@@ -249,15 +249,32 @@ static Intilery *sharedInstance = nil;
 
 - (void)track:(NSString *)event
 {
-    [self track:event properties:nil withName:event];
+    [self track:event properties:nil withName:event withPath:@""];
+}
+
+- (void)track:(NSString *)event withPath:path
+{
+    [self track:event properties:nil withName:event withPath:path];
 }
 
 - (void)track:(NSString *)event properties:(NSDictionary *)properties
 {
-    [self track:event properties:properties withName:event];
+    [self track:event properties:properties withName:event withPath:@""];
 }
 
+
 - (void)track:(NSString *)event properties:(NSDictionary *)properties withName:(NSString *)eventName
+{
+    [self track:event properties:properties withName:eventName withPath:@""];
+}
+
+
+- (void)track:(NSString *)event properties:(NSDictionary *)properties withPath:(NSString *)path
+{
+    [self track:event properties:properties withName:event withPath:path];
+}
+
+- (void)track:(NSString *)event properties:(NSDictionary *)properties withName:(NSString *)eventName withPath:(NSString *)path
 {
     if (event == nil || [event length] == 0) {
         IntileryError(@"%@ intilery track called with empty event parameter. using '_event'", self);
@@ -281,6 +298,7 @@ static Intilery *sharedInstance = nil;
         
         NSDictionary *e = @{ @"Visit" : @{@"VisitorID":self.distinctId},
                              @"EventAction": event, @"EventName": eventName,
+                             @"Context": @{@"Host":self.appName, @"Path":path},
                              @"UserAgent": self.appName, @"HappenedAt": epochSeconds,
                              @"EventData": [NSDictionary dictionaryWithDictionary:p]} ;
         
@@ -334,36 +352,35 @@ static Intilery *sharedInstance = nil;
     [request setHTTPMethod:@"GET"];
     
     dispatch_async(self.serialQueue, ^{
-        NSError *error = nil;
-        NSHTTPURLResponse *urlResponse = nil;
-        NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
+        NSURLSession *session = [NSURLSession sharedSession];
+        NSURLSessionTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+                                                                                          NSURLResponse *urlResponse,
+                                                                                          NSError *error) {
+            BOOL success = [self handleNetworkResponse:(NSHTTPURLResponse *)urlResponse withError:error];
+            if (error || !success) {
+                IntileryError(@"%@ network failure: %@", self, error);
+            } else {
+                NSDictionary *json = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil];
+                if (handler) {
+                    dispatch_async(dispatch_get_main_queue(), ^(void) {handler(json);});
+                }
+            }
+        }];
+        [task resume];
         
-        BOOL success = [self handleNetworkResponse:urlResponse withError:error];
-        if (error || !success) {
-            IntileryError(@"%@ network failure: %@", self, error);
-        }
-        
-        NSDictionary *json = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:nil];
-        if (handler) {
-            dispatch_async(dispatch_get_main_queue(), ^(void) {handler(json);});
-        }
     });
 }
 
 
-- (void)trackPushNotification:(NSDictionary *)userInfo withEvent:(NSString *)event
+- (void)trackPushNotification:(NSDictionary *)userInfo event:(NSString *)event
 {
-    if (userInfo && userInfo[@"it"]) {
-        NSDictionary *payload = userInfo[@"it"];
-        if ([payload isKindOfClass:[NSDictionary class]] && payload[@"id"]) {
-            [self track:event properties:@{@"_Push.ID":payload[@"id"]}];
-        }
-    }
+    IntileryDebug(@"%@ tracking push payload %@", self, userInfo);
+    //TODO
 }
 
 - (void)trackPushNotification:(NSDictionary *)userInfo
 {
-    [self trackPushNotification:userInfo withEvent:@"push open"];
+    [self trackPushNotification:userInfo event:@"push opened"];
 }
 
 
@@ -470,14 +487,29 @@ static Intilery *sharedInstance = nil;
         NSString *postBody = [self encodeAPIData:batch];
         IntileryDebug(@"%@ flushing %lu of %lu to %@: %@", self, (unsigned long)[batch count], (unsigned long)[queue count], endpoint, queue);
         NSURLRequest *request = [self apiRequestWithEndpoint:endpoint andBody:postBody];
-        NSError *error = nil;
+    
         
-        NSHTTPURLResponse *urlResponse = nil;
-        [NSURLConnection sendSynchronousRequest:request returningResponse:&urlResponse error:&error];
+        __block BOOL didFail = NO;
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
+        NSURLSession *session = [NSURLSession sharedSession];
+        [[session dataTaskWithRequest:request completionHandler:^(NSData *responseData,
+                                                                  NSURLResponse *urlResponse,
+                                                                  NSError *error) {
+            
+            BOOL success = [self handleNetworkResponse:(NSHTTPURLResponse *)urlResponse withError:error];
+            if (error || !success) {
+                IntileryError(@"%@ network failure: %@", self, error);
+                didFail = YES;
+            } else {
+                //NSString *response =[[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+            }
+            
+            dispatch_semaphore_signal(semaphore);
+        }] resume];
         
-        BOOL success = [self handleNetworkResponse:urlResponse withError:error];
-        if (error || !success) {
-            IntileryError(@"%@ network failure: %@", self, error);
+        dispatch_semaphore_wait(semaphore, DISPATCH_TIME_FOREVER);
+        
+        if (didFail) {
             break;
         }
         
@@ -494,7 +526,7 @@ static Intilery *sharedInstance = nil;
     [request setValue:[NSString stringWithFormat:@"Basic %@", self.apiToken] forHTTPHeaderField:@"Authorization"];
     [request setHTTPMethod:@"POST"];
     [request setHTTPBody:[body dataUsingEncoding:NSUTF8StringEncoding]];
-    IntileryDebug(@"%@ http request: %@?%@", self, URL, body);
+    IntileryDebug(@"%@ http post to: %@, %@", self, URL, body);
     return request;
 }
 

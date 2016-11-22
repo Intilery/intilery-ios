@@ -8,7 +8,7 @@
 
 #import "IntileryExceptionHandler.h"
 #import "Intilery.h"
-#import "MPLogger.h"
+#import "IntileryLogger.h"
 
 @interface IntileryExceptionHandler ()
 

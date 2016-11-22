@@ -52,7 +52,7 @@ Import `Intilery.h` into your `AppDelegate.m` and add the following lines of cod
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     // Override point for customization after application launch.
 
-    [Intilery sharedInstanceWithToken:INTILERY_APP withToken:INTILERY_TOKEN];
+    [Intilery sharedInstanceWithToken:INTILERY_APP withToken:INTILERY_TOKEN withIntileryURL:@"https://www.intilery-analytics.com"];
 }
 ```
 

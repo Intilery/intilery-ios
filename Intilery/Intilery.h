@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
  Intilery *intilery = [Intilery sharedInstanceWithToken:@"YOUR APP NAME" withToken:@"YOUR API TOKEN"];
  
  // Track an event in Intilery Engagement
- [intilery track:@"event action" properties:@{@"Entity.Property":@"Value"} eventName:@"Event Name"];
+ [intilery track:@"event action" properties:@{@"Entity.Property":@"Value"} withName:@"Event Name" withPath:@"Page Path"];
  
  </pre>
  
@@ -158,9 +158,9 @@ NS_ASSUME_NONNULL_BEGIN
  @param launchOptions   your application delegate's launchOptions
  
  */
-+ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken withLaunchOptions:(nullable NSDictionary *)launchOptions;
++ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions;
 
-+ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken withLaunchOptions:(nullable NSDictionary *)launchOptions withIntileryURL:(NSString *)intileryURL;
++ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions withIntileryURL:(NSString *)intileryURL;
 
 /*!
  @method
@@ -191,7 +191,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param launchOptions   optional app delegate launchOptions
  @param flushInterval   interval to run background flushing
  */
-- (instancetype)initWithToken:(NSString *)appName withToken:(NSString *)apiToken withLaunchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval withIntileryURL:(NSString *)intileryURL;
+- (instancetype)initWithToken:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval withIntileryURL:(NSString *)intileryURL;
 
 /*!
  @property
@@ -249,12 +249,18 @@ NS_ASSUME_NONNULL_BEGIN
  @param event           event action
  @param properties      properties dictionary
  @param withName        event name
+ @param withPath        path
  */
+
+- (void)track:(NSString *)event properties:(nullable NSDictionary *)properties withName:(NSString *)eventName withPath:(NSString *)path;
+
+- (void)track:(NSString *)event properties:(nullable NSDictionary *)properties withPath:(NSString *)path;
+
 - (void)track:(NSString *)event properties:(nullable NSDictionary *)properties withName:(NSString *)eventName;
 
 - (void)track:(NSString *)event properties:(nullable NSDictionary *)properties;
 
-
+- (void)track:(NSString *)event withPath:(NSString *)path;
 /*!
  @method
  
@@ -297,7 +303,6 @@ NS_ASSUME_NONNULL_BEGIN
  */
 - (void)trackPushNotification:(NSDictionary *)userInfo;
 
-- (void)trackPushNotification:(NSDictionary *)userInfo withEvent:(NSString *)eventAction;
 
 /*!
  @method
