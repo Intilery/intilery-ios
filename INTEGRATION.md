@@ -25,7 +25,7 @@ name matches the `event action`.
 ## Register for Push Notifications
 
 To associate the visitor with a token to use with push notifications you first of all need to generate a token.
-Example instructions on how to do this can be found here: [iOS Push Notifications](https://facebook.github.io/react-native/docs/pushnotificationios.html)
+See the example [AppDelegate.m](EXAMPLE.md).
 
 Once you have the token you can register the device to receive push messages
 ```ObjectiveC

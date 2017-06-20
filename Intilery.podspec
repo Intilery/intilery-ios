@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.source       = { :git => 'https://github.com/intilery/intilery-ios.git', :tag => "v#{s.version}" }
   s.requires_arc = true
   s.default_subspec = 'Intilery'
-  s.platforms = { :ios => '7.0' }
+  s.platforms = { :ios => '9.0' }
 
   s.subspec 'Intilery' do |ss|
     ss.source_files  = 'Intilery/**/*.{m,h}', 'Intilery/**/*.swift'
