@@ -134,7 +134,7 @@ NS_ASSUME_NONNULL_BEGIN
  the API.
  
  @param appName          your app name
- @param withToken        your project token
+ @param apiToken        your project token
  */
 
 + (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken;
@@ -154,7 +154,7 @@ NS_ASSUME_NONNULL_BEGIN
  information created by push notifications.
  
  @param appName         your app name
- @param withToken        your project token
+ @param apiToken        your project token
  @param launchOptions   your application delegate's launchOptions
  
  */
@@ -187,7 +187,7 @@ NS_ASSUME_NONNULL_BEGIN
  project, consider using <code>sharedInstanceWithToken:</code>.
  
  @param appName         your app name
- @param withToken        your project token
+ @param apiToken        your project token
  @param launchOptions   optional app delegate launchOptions
  @param flushInterval   interval to run background flushing
  */
@@ -248,8 +248,8 @@ NS_ASSUME_NONNULL_BEGIN
  
  @param event           event action
  @param properties      properties dictionary
- @param withName        event name
- @param withPath        path
+ @param eventName       event name
+ @param path            path
  */
 
 - (void)track:(NSString *)event properties:(nullable NSDictionary *)properties withName:(NSString *)eventName withPath:(NSString *)path;
@@ -289,7 +289,7 @@ NS_ASSUME_NONNULL_BEGIN
  Gets visitor/customer properties.
  
  @param properties      Array of properties to return
- @param callback        Block with which to process the returned properties
+ @param handler         Block with which to process the returned properties
  */
 - (void)getVisitorProperties:(NSArray *)properties callback:(void (^)(NSDictionary *))handler;
 
