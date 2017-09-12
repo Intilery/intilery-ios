@@ -308,6 +308,18 @@ NS_ASSUME_NONNULL_BEGIN
  @method
  
  @abstract
+ Track a push notification using its payload sent from Intilery.
+ 
+ @param userInfo         remote notification payload dictionary
+ @param link             link the user selected from the payload
+ */
+- (void)trackPushNotification:(NSDictionary *)userInfo link:(NSString*)link;
+
+
+/*!
+ @method
+ 
+ @abstract
  Uploads queued data to the Intilery server.
  
  @discussion

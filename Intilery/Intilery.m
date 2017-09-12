@@ -371,18 +371,18 @@ static Intilery *sharedInstance = nil;
     });
 }
 
-
-- (void)trackPushNotification:(NSDictionary *)userInfo event:(NSString *)event
+- (void)trackPushNotification:(NSDictionary *)userInfo link:(NSString *)link
 {
-    IntileryDebug(@"%@ tracking push payload %@", self, userInfo);
-    //TODO
+    NSString *value = userInfo[@"it"][@"id"];
+    [self track:@"_push open" properties:@{@"_Email.Reference":value, @"_Email.Link":link}];
 }
+
 
 - (void)trackPushNotification:(NSDictionary *)userInfo
 {
-    [self trackPushNotification:userInfo event:@"push opened"];
+    NSString *value = userInfo[@"it"][@"id"];
+    [self track:@"_push open" properties:@{@"_Email.Reference":value}];
 }
-
 
 - (void)reset
 {
