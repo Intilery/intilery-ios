@@ -25,7 +25,7 @@ Check out the **[Carthage docs »](https://github.com/Carthage/Carthage)** for m
 
 To help users stay up to date with the latests version of our iOS SDK, we always recommend integrating our SDK via CocoaPods, which simplifies version updates and dependency management. However, there are cases where users can't use CocoaPods. Not to worry, just follow these manual installation steps and you'll be all set.
 
-##Step 1: Clone the SDK
+## Step 1: Clone the SDK
 
 Git clone the latest version of "intilery-ios" to your local machine using the following code in your terminal:
 
@@ -35,13 +35,13 @@ git clone https://github.com/intilery/intilery-ios.git
 
 If you don't have git installed, get it [here](http://git-scm.com/downloads).
 
-##Step 2: Add the SDK to your app!
+## Step 2: Add the SDK to your app!
 
 Add the "Intilery" folder from the "intilery-ios" to your Xcode project's folder.
 
 And drag and drop the Intilery folder into your Xcode Project Workspace.
 
-##Step 3: Import All dependencies
+## Step 3: Import All dependencies
 
 Add all dependencies of the Intilery SDK to your app. The full list of necessary frameworks and libraries on lines 16-17 in the "Intilery.podspec" file in the "intilery-ios" directory: 
 
@@ -57,6 +57,23 @@ Import `Intilery.h` into your `AppDelegate.m` and add the following lines of cod
 ```
 
 See [Integration Guide](INTEGRATION.md) for more details.
+
+# Alternative manual installation
+
+This method may be useful if you wish to use cocoapods for production, and don't want to juggle different ways of installing this SDK
+
+## Step 1: Install via CocoaPods
+
+As above
+
+## Step 2:
+
+Clone this repository as outlined above
+
+## Step 3:
+
+Navigate to the 'Pods/Intilery' folder in your project, and delete the 'Intilery' folder inside (Yes, that's the Pods/Intilery/Intilery folder you should be deleting)  
+Then, create a symbolic link to the 'Intilery' folder from this repo in it's place
 
 ## Start tracking
 

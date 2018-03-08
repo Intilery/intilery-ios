@@ -381,7 +381,12 @@ static Intilery *sharedInstance = nil;
 - (void)trackPushNotification:(NSDictionary *)userInfo
 {
     NSString *value = userInfo[@"it"][@"id"];
-    [self track:@"_push open" properties:@{@"_Email.Reference":value}];
+
+    @try {
+        [self track:@"_push open" properties:@{@"_Email.Reference":value}];
+    } @catch (NSException *exception) {
+        NSLog(@"Encountered exception: %@", exception);
+    }
 }
 
 - (void)reset
