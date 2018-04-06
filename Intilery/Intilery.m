@@ -700,8 +700,6 @@ static Intilery *sharedInstance = nil;
         }
         //NSArray *tokens = @[[NSString stringWithString:hex]];
         NSString *token = [NSString stringWithString:hex];
-        NSDictionary *properties = @{@"Register App.appCode": self.appName,
-                                     @"Register App.deviceID": token};
 
         properties[@"Register App.deviceID"] = token;
     }
