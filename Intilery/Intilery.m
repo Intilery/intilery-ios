@@ -683,28 +683,26 @@ static Intilery *sharedInstance = nil;
     return VERSION;
 }
 
-- (void)addPushDeviceToken:(NSData *)deviceToken
-{
-    UIUserNotificationSettings *notificationSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
-    NSMutableDictionary *properties = [[NSMutableDictionary alloc] initWithCapacity:2];
-    properties[@"Register App.appCode"] = self.appName;
-
-    if (notificationSettings && notificationSettings.types != UIUserNotificationTypeNone) {
-        const unsigned char *buffer = (const unsigned char *)[deviceToken bytes];
-        if (!buffer) {
-            return;
-        }
-        NSMutableString *hex = [NSMutableString stringWithCapacity:(deviceToken.length * 2)];
-        for (NSUInteger i = 0; i < deviceToken.length; i++) {
-            [hex appendString:[NSString stringWithFormat:@"%02lx", (unsigned long)buffer[i]]];
-        }
-        //NSArray *tokens = @[[NSString stringWithString:hex]];
-        NSString *token = [NSString stringWithString:hex];
-
-        properties[@"Register App.deviceID"] = token;
+- (void)addPushDeviceToken:(NSData *)deviceToken {
+    const unsigned char *buffer = (const unsigned char *)[deviceToken bytes];
+    if (!buffer) {
+        return;
     }
+    NSMutableString *hex = [NSMutableString stringWithCapacity:(deviceToken.length * 2)];
+    for (NSUInteger i = 0; i < deviceToken.length; i++) {
+        [hex appendString:[NSString stringWithFormat:@"%02lx", (unsigned long)buffer[i]]];
+    }
+    //NSArray *tokens = @[[NSString stringWithString:hex]];
+    NSString *token = [NSString stringWithString:hex];
+
+    NSDictionary *properties = @{@"Register App.appCode": self.appName,
+                                 @"Register App.deviceID": token};
 
     [self track:@"Set Device ID" properties:properties];
+}
+
+- (void)removePushDeviceToken {
+    [self track:@"_push unsubscribe"];
 }
 
 @end
