@@ -381,7 +381,12 @@ static Intilery *sharedInstance = nil;
 - (void)trackPushNotification:(NSDictionary *)userInfo
 {
     NSString *value = userInfo[@"it"][@"id"];
-    [self track:@"_push open" properties:@{@"_Email.Reference":value}];
+
+    @try {
+        [self track:@"_push open" properties:@{@"_Email.Reference":value}];
+    } @catch (NSException *exception) {
+        NSLog(@"Encountered exception: %@", exception);
+    }
 }
 
 - (void)reset
@@ -678,8 +683,7 @@ static Intilery *sharedInstance = nil;
     return VERSION;
 }
 
-- (void)addPushDeviceToken:(NSData *)deviceToken
-{
+- (void)addPushDeviceToken:(NSData *)deviceToken {
     const unsigned char *buffer = (const unsigned char *)[deviceToken bytes];
     if (!buffer) {
         return;
@@ -690,9 +694,15 @@ static Intilery *sharedInstance = nil;
     }
     //NSArray *tokens = @[[NSString stringWithString:hex]];
     NSString *token = [NSString stringWithString:hex];
+
     NSDictionary *properties = @{@"Register App.appCode": self.appName,
                                  @"Register App.deviceID": token};
+
     [self track:@"Set Device ID" properties:properties];
+}
+
+- (void)removePushDeviceToken {
+    [self track:@"_push unsubscribe"];
 }
 
 @end

@@ -23,6 +23,8 @@ profile
 project.xcworkspace/
 xcuserdata/
 
+Pods/
+
 # AppCode
 .idea
 

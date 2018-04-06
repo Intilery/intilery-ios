@@ -380,10 +380,22 @@ NS_ASSUME_NONNULL_BEGIN
  web interface. You should call this method with the <code>NSData</code>
  token passed to
  <code>application:didRegisterForRemoteNotificationsWithDeviceToken:</code>.
- 
+
  @param deviceToken     device token as returned <code>application:didRegisterForRemoteNotificationsWithDeviceToken:</code>
  */
 - (void)addPushDeviceToken:(NSData *)deviceToken;
+
+/*!
+ @method
+ 
+ @abstract
+ Unregister the given device to track push notification unsubscribes.
+ 
+ @discussion
+ This will disassociate the device token with the current customer,
+ which will prevent the sending of further push notifications to the device.
+ */
+- (void)removePushDeviceToken;
 
 @end
 

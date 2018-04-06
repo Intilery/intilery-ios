@@ -72,6 +72,7 @@
 			children = (
 				7C170C2C1A4A02F500D9E0F2 /* Intilery */,
 				7C170C2B1A4A02F500D9E0F2 /* Products */,
+				F96329BB2077C35E007B278D /* Recovered References */,
 			);
 			indentWidth = 4;
 			sourceTree = "<group>";
@@ -128,6 +129,14 @@
 				7C170D411A4A059400D9E0F2 /* UIKit.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F96329BB2077C35E007B278D /* Recovered References */ = {
+			isa = PBXGroup;
+			children = (
+				7C170C4D1A4A035F00D9E0F2 /* MPAbstractABTestDesignerMessage.h */,
+			);
+			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -324,7 +333,7 @@
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -355,7 +364,7 @@
 				GCC_PREFIX_HEADER = "";
 				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
