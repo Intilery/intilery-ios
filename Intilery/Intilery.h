@@ -380,7 +380,7 @@ NS_ASSUME_NONNULL_BEGIN
  web interface. You should call this method with the <code>NSData</code>
  token passed to
  <code>application:didRegisterForRemoteNotificationsWithDeviceToken:</code>.
- If no token is passed through, it is assumed that the user has disabled push
+ If no token is passed to us, it is assumed that the user has disabled push
  notifications
 
  @param deviceToken     device token as returned <code>application:didRegisterForRemoteNotificationsWithDeviceToken:</code>
