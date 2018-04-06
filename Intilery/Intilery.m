@@ -689,7 +689,7 @@ static Intilery *sharedInstance = nil;
     NSMutableDictionary *properties = [[NSMutableDictionary alloc] initWithCapacity:2];
     properties[@"Register App.appCode"] = self.appName;
 
-    if (notificationSettings && !(notificationSettings.types == UIUserNotificationTypeNone)) {
+    if (notificationSettings && notificationSettings.types != UIUserNotificationTypeNone) {
         const unsigned char *buffer = (const unsigned char *)[deviceToken bytes];
         if (!buffer) {
             return;
