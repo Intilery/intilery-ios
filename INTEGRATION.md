@@ -1,5 +1,7 @@
 # Integrating Events into your App
 
+For a working example of how to integrate, look [here](https://github.com/Intilery/intilery-ios-example)
+
 ## Initialisation
 
 From your application configuration in the Intilery Console, you should be able to get the following information and add it to the `AppDelegate.m`

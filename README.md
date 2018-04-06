@@ -58,23 +58,6 @@ Import `Intilery.h` into your `AppDelegate.m` and add the following lines of cod
 
 See [Integration Guide](INTEGRATION.md) for more details.
 
-# Alternative manual installation
-
-This method may be useful if you wish to use cocoapods for production, and don't want to juggle different ways of installing this SDK
-
-## Step 1: Install via CocoaPods
-
-As above
-
-## Step 2:
-
-Clone this repository as outlined above
-
-## Step 3:
-
-Navigate to the 'Pods/Intilery' folder in your project, and delete the 'Intilery' folder inside (Yes, that's the Pods/Intilery/Intilery folder you should be deleting)  
-Then, create a symbolic link to the 'Intilery' folder from this repo in it's place
-
 ## Start tracking
 
 You're done! You've successfully integrated the Intilery SDK into your app. 
