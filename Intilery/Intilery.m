@@ -224,6 +224,8 @@ static Intilery *sharedInstance = nil;
 {
     NSString *distinctId = [self IFA];
     
+    
+    
     if (!distinctId && NSClassFromString(@"UIDevice")) {
         distinctId = [[UIDevice currentDevice].identifierForVendor UUIDString];
     }
@@ -670,6 +672,11 @@ static Intilery *sharedInstance = nil;
         ifa = [uuid UUIDString];
     }
 #endif
+    
+    if ([ifa isEqualToString:@"00000000-0000-0000-0000-000000000000"]) {
+        return nil;
+    }
+    
     return ifa;
 }
 
