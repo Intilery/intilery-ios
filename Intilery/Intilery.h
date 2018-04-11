@@ -137,9 +137,9 @@ NS_ASSUME_NONNULL_BEGIN
  @param apiToken        your project token
  */
 
-+ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken;
++ (Intilery *)sharedInstanceWithAppName:(NSString *)appName withToken:(NSString *)apiToken;
 
-+ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken withIntileryURL:(NSString *)intileryURL;
++ (Intilery *)sharedInstanceWithAppName:(NSString *)appName withToken:(NSString *)apiToken withIntileryURL:(NSString *)intileryURL;
 
 /*!
  @method
@@ -158,9 +158,9 @@ NS_ASSUME_NONNULL_BEGIN
  @param launchOptions   your application delegate's launchOptions
  
  */
-+ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions;
++ (Intilery *)sharedInstanceWithAppName:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions;
 
-+ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions withIntileryURL:(NSString *)intileryURL;
++ (Intilery *)sharedInstanceWithAppName:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions withIntileryURL:(NSString *)intileryURL;
 
 /*!
  @method
@@ -191,7 +191,7 @@ NS_ASSUME_NONNULL_BEGIN
  @param launchOptions   optional app delegate launchOptions
  @param flushInterval   interval to run background flushing
  */
-- (instancetype)initWithToken:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval withIntileryURL:(NSString *)intileryURL;
+- (instancetype)initWithAppName:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(nullable NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval withIntileryURL:(NSString *)intileryURL;
 
 /*!
  @property
