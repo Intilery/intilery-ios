@@ -41,7 +41,7 @@
 @implementation Intilery
 
 static Intilery *sharedInstance = nil;
-+ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions withIntileryURL:(NSString *)intileryURL
++ (Intilery *)sharedInstanceWithAppName:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions withIntileryURL:(NSString *)intileryURL
 {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -52,26 +52,26 @@ static Intilery *sharedInstance = nil;
         const NSUInteger flushInterval = 60;
 #endif
         
-        sharedInstance = [[super alloc] initWithToken:appName withToken:apiToken launchOptions:launchOptions andFlushInterval:flushInterval withIntileryURL:intileryURL];
+        sharedInstance = [[super alloc] initWithAppName:appName withToken:apiToken launchOptions:launchOptions andFlushInterval:flushInterval withIntileryURL:intileryURL];
     });
     return sharedInstance;
 }
 
-+ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken
++ (Intilery *)sharedInstanceWithAppName:(NSString *)appName withToken:(NSString *)apiToken
 {
-    return [Intilery sharedInstanceWithToken:appName withToken:apiToken withIntileryURL:INTILERY_URL];
+    return [Intilery sharedInstanceWithAppName:appName withToken:apiToken withIntileryURL:INTILERY_URL];
 }
 
 
-+ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken withIntileryURL:(NSString *)intileryURL
++ (Intilery *)sharedInstanceWithAppName:(NSString *)appName withToken:(NSString *)apiToken withIntileryURL:(NSString *)intileryURL
 {
-    return [Intilery sharedInstanceWithToken:appName withToken:apiToken launchOptions:nil withIntileryURL:intileryURL];
+    return [Intilery sharedInstanceWithAppName:appName withToken:apiToken launchOptions:nil withIntileryURL:intileryURL];
 }
 
 
-+ (Intilery *)sharedInstanceWithToken:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
++ (Intilery *)sharedInstanceWithAppName:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions
 {
-    return [Intilery sharedInstanceWithToken:appName withToken:apiToken launchOptions:launchOptions withIntileryURL:INTILERY_URL];
+    return [Intilery sharedInstanceWithAppName:appName withToken:apiToken launchOptions:launchOptions withIntileryURL:INTILERY_URL];
 }
 
 + (Intilery *)sharedInstance
@@ -82,7 +82,7 @@ static Intilery *sharedInstance = nil;
     return sharedInstance;
 }
 
-- (instancetype)initWithToken:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval withIntileryURL:(NSString *)intileryURL
+- (instancetype)initWithAppName:(NSString *)appName withToken:(NSString *)apiToken launchOptions:(NSDictionary *)launchOptions andFlushInterval:(NSUInteger)flushInterval withIntileryURL:(NSString *)intileryURL
 {
     if (apiToken == nil) {
         apiToken = @"";
@@ -670,6 +670,11 @@ static Intilery *sharedInstance = nil;
         ifa = [uuid UUIDString];
     }
 #endif
+    
+    if ([ifa isEqualToString:@"00000000-0000-0000-0000-000000000000"]) {
+        return nil;
+    }
+    
     return ifa;
 }
 
