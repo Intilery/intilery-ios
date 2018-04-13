@@ -12,7 +12,7 @@
 #import "IntileryLogger.h"
 #import "MPFoundation.h"
 
-#define VERSION @"0.0.6"
+#define VERSION @"1.0.3"
 #define INTILERY_URL @"https://www.intilery-analytics.com"
 
 
@@ -229,7 +229,14 @@ static Intilery *sharedInstance = nil;
     }
     if (!distinctId) {
         IntileryDebug(@"%@ error getting device identifier: falling back to uuid", self);
-        distinctId = [[NSUUID UUID] UUIDString];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        
+        if ([defaults valueForKey:@"INTILERY_ID"]) {
+            distinctId = [defaults valueForKey:@"INTILERY_ID"];
+        } else {
+            distinctId = [[NSUUID UUID] UUIDString];
+            [defaults setValue:distinctId forKey:@"INTILERY_ID"];
+        }
     }
     return distinctId;
 }
@@ -660,20 +667,20 @@ static Intilery *sharedInstance = nil;
 - (NSString *)IFA
 {
     NSString *ifa = nil;
-#if !defined(INTILERY_NO_IFA)
+#if defined(INTILERY_USE_IFA)
     Class ASIdentifierManagerClass = NSClassFromString(@"ASIdentifierManager");
     if (ASIdentifierManagerClass) {
         SEL sharedManagerSelector = NSSelectorFromString(@"sharedManager");
         id sharedManager = ((id (*)(id, SEL))[ASIdentifierManagerClass methodForSelector:sharedManagerSelector])(ASIdentifierManagerClass, sharedManagerSelector);
-        SEL advertisingIdentifierSelector = NSSelectorFromString(@"advertisingIdentifier");
-        NSUUID *uuid = ((NSUUID* (*)(id, SEL))[sharedManager methodForSelector:advertisingIdentifierSelector])(sharedManager, advertisingIdentifierSelector);
-        ifa = [uuid UUIDString];
+        SEL advertisingTrackingEnabledSelector = NSSelectorFromString(@"isAdvertisingTrackingEnabled");
+        BOOL isTrackingEnabled = ((BOOL (*)(id, SEL))[sharedManager methodForSelector:advertisingTrackingEnabledSelector])(sharedManager, advertisingTrackingEnabledSelector);
+        if (isTrackingEnabled) {
+            SEL advertisingIdentifierSelector = NSSelectorFromString(@"advertisingIdentifier");
+            NSUUID *uuid = ((NSUUID* (*)(id, SEL))[sharedManager methodForSelector:advertisingIdentifierSelector])(sharedManager, advertisingIdentifierSelector);
+            ifa = [uuid UUIDString];
+        }
     }
 #endif
-    
-    if ([ifa isEqualToString:@"00000000-0000-0000-0000-000000000000"]) {
-        return nil;
-    }
     
     return ifa;
 }

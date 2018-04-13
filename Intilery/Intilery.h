@@ -200,21 +200,22 @@ NS_ASSUME_NONNULL_BEGIN
  Sets the distinct ID of the current user.
  
  @discussion
- Intilery will choose a default distinct ID based on
- whether you are using the AdSupport.framework or not.
- 
- If you are not using the AdSupport Framework (iAds), then we use the
+ Initlery will use a default distinct ID based on the IFV. We get the ID using
  <code>[UIDevice currentDevice].identifierForVendor</code> (IFV) string as the
  default distinct ID.  This ID will identify a user across all apps by the same
  vendor, but cannot be used to link the same user across apps from different
  vendors.
  
+ If you are using the AdSupport Framework (iAds), and want to use the IFA as
+ the distinct ID, you can force this by using the <code>INTILERY_USE_IFA</code>
+ pre-processor flag in your build settings.
+ 
  If you are showing iAds in your application, you are allowed use the iOS ID
  for Advertising (IFA) to identify users. If you have this framework in your
- app, Intilery will use the IFA as the default distinct ID. If you have
- AdSupport installed but still don't want to use the IFA, you can define the
- <code>INTILERY_NO_IFA</code> preprocessor flag in your build settings, and
- Intilery will use the IFV as the default distinct ID.
+ app, Intilery will then use the IFA as the default distinct ID.
+
+ If a user has disabled tracking and you have chosed to use the IFA, it will
+ not be available and we will fall back to using the IFV again.
  
  If we are unable to get an IFA or IFV, we will fall back to generating a
  random persistent UUID.
