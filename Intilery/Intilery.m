@@ -664,6 +664,11 @@ static Intilery *sharedInstance = nil;
     return results;
 }
 
+- (NSString *)deviceVersion
+{
+    return [[UIDevice currentDevice] systemVersion];
+}
+
 - (NSString *)IFA
 {
     NSString *ifa = nil;
@@ -708,8 +713,10 @@ static Intilery *sharedInstance = nil;
     NSString *token = [NSString stringWithString:hex];
 
     NSDictionary *properties = @{@"Register App.appCode": self.appName,
-                                 @"Register App.deviceID": token};
-
+                                 @"Register App.deviceID": token,
+                                 @"Register App.deviceModel": [self deviceModel],
+                                 @"Register App.deviceVersion": [self deviceVersion]
+                                 };
     [self track:@"Set Device ID" properties:properties];
 }
 
