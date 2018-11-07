@@ -306,7 +306,7 @@ static Intilery *sharedInstance = nil;
         NSDictionary *e = @{ @"Visit" : @{@"VisitorID":self.distinctId},
                              @"EventAction": event, @"EventName": eventName,
                              @"Context": @{@"Host":self.appName, @"Path":path},
-                             @"UserAgent": self.appName, @"HappenedAt": epochSeconds,
+                             @"UserAgent": self.appName, @"RecordedAt": epochSeconds,
                              @"EventData": [NSDictionary dictionaryWithDictionary:p]} ;
         
         IntileryDebug(@"%@ queueing event: %@", self, e);
